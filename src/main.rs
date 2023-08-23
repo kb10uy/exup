@@ -60,7 +60,7 @@ async fn main() -> Result<()> {
     let mut asset_met = true;
     let mut asset_meta_met = true;
     let mut asset_path_met = true;
-    let mut asset_preview_met = true;
+    // let mut asset_preview_met = true;
 
     let extract_gate = Arc::new(Semaphore::new(args.max_concurrency + 1));
     let parent_permit = extract_gate.clone().acquire_owned().await?;
@@ -80,7 +80,7 @@ async fn main() -> Result<()> {
             asset_met = false;
             asset_meta_met = false;
             asset_path_met = false;
-            asset_preview_met = false;
+            // asset_preview_met = false;
 
             continue;
         }
@@ -102,13 +102,13 @@ async fn main() -> Result<()> {
                 entry.read_to_string(&mut asset_path)?;
             }
             "preview.png" => {
-                asset_preview_met = true;
+                // asset_preview_met = true;
             }
             _ => bail!("unknown file contained: {filename}"),
         }
 
         // asset data has all met
-        if asset_met && asset_meta_met && asset_path_met && asset_preview_met {
+        if asset_met && asset_meta_met && asset_path_met {
             let asset_path = if let Some(extract_prefix) = args.prefix.as_deref() {
                 let Ok(stripped) = Path::new(&asset_path).strip_prefix(extract_prefix) else {
                     continue;
